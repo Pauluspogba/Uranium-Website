@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Global Hackatom Namibia 2025</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+ <style>
+  header {
+    position: relative;
+    background-image: url('heaferimage.jpg'); /* Replace with your actual image path */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem;
+  }
+
+  /* Optional: Remove or reduce overlay */
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Adjust transparency */
+    z-index: 0;
+  }
+
+  /* Make sure header content sits above the overlay */
+  header * {
+    position: relative;
+    z-index: 1;
+  }
+
+  header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); /* Optional for readability */
+  }
+</style>
+
+
+    
+body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: #333;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    nav {
+      background: #003366;
+      padding: 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 2rem auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      background: rgba(255, 255, 255, 0.95);
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h2 {
+      color: #003366;
+    }
+    #map {
+      height: 400px;
+      margin-top: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-top: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 1rem;
+    }
+    .gallery-grid img {
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+    #team ul {
+      list-style-type: none;
+      padding: 0;
+      font-size: 1.2rem;
+    }
+    #team ul li {
+      padding: 0.3rem 0;
+    }
+    form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    form button {
+      background: #003366;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background: #005599;
+    }
+  </style>
+</head>
+<body>
+
+<body>
+
+  <header>
+    <h1>Uranium insights Namibia</h1>
+    <p>Innovating Uranium Mining Through Technology & Sustainability</p>
+  </header>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#methods">Mining Methods</a>
+    <a href="#challenge">Situational Task</a>
+    <a href="#data">Data & Research</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="home">
+    <h2>Welcome</h2>
+    <p><strong>Purpose:</strong> To educate the public, stakeholders, and youth about uranium mining and geology in Namibia.</p>
+    <p><strong>Mission:</strong> Promote responsible, sustainable uranium mining through research-based solutions.</p>
+    <p><strong>Infographic:</strong> Uranium timeline (1976 – present)</p>
+  </section>
+
+  <section id="about">
+    <h2>About Uranium & Geology</h2>
+
+    <h3>What is Uranium?</h3>
+    <ul>
+      <li>Used primarily as fuel in nuclear power plants.</li>
+      <li>Highly dense and heavy, making it useful in military and scientific applications.</li>
+      <li>Found in various minerals, such as uraninite, carnotite, and coffinite.</li>
+    </ul>
+
+    <h3>Geological Reasons Namibia is Rich in Uranium</h3>
+    <ul>
+      <li><strong>Arid Climate + Exposed Rocks:</strong> Namibia's dry desert environment (like the Namib Desert) slows erosion, keeping uranium-rich rocks exposed near the surface.</li>
+      <li><strong>Proterozoic Rocks & Granites:</strong> The region has rocks from the Proterozoic Eon (1,000–2,500 million years old), including granitic intrusions rich in uranium (e.g., Rossing and Husab Mines).</li>
+      <li><strong>Calcrete-Hosted Deposits:</strong> In desert basins, uranium leaches from older rocks and accumulates in calcrete layers near the surface (e.g., Langer Heinrich and Trekkopje Mines).</li>
+      <li><strong>Tectonic Setting:</strong> Namibia lies in the Damara Orogenic Belt, formed by ancient continental collisions, creating structural traps where uranium-rich fluids accumulated.</li>
+    </ul>
+
+    <h3>Major Uranium Provinces in Namibia</h3>
+    <p>See the map below for major uranium mine locations in Namibia.</p>
+    <div id="map"></div>
+
+    <h3>Atomic Diagram of Uranium</h3>
+    <img src="uraniumatom.jpeg" alt="Atomic structure of Uranium" />
+  </section>
+
+<section id="methods">
+  <h2>Mining Methods in Namibia</h2>
+  <p><strong>1. Open-Pit Mining</strong><br>
+  <em>Used by:</em> Husab Mine, Rossing Mine, Langer Heinrich Mine (initially), Trekkopje Mine</p>
+  <ul>
+    <li>Exploration & Planning: Geologists identify uranium ore using drilling and sampling. Mine engineers design the pit layout and depth.</li>
+    <li>Overburden Removal: Soil and non-uranium rock is removed using bulldozers and excavators.</li>
+    <li>Drilling and Blasting: Holes are drilled and filled with explosives to break rock.</li>
+    <li>Loading and Hauling: Shovels load ore into haul trucks for processing.</li>
+    <li>Waste Rock Management: Waste is dumped in designated sites.</li>
+    <li>Progressive Deepening: Pits grow deeper over time as mining continues.</li>
+  </ul>
+  <img src="open_pit_overview.jpg" alt="Open-Pit Mining Method Image">
+
+  <p><strong>2. Heap Leaching</strong><br>
+  <em>Used by:</em> Trekkopje Mine, future Langer Heinrich operations</p>
+  <ul>
+    <li>Ore is crushed and stacked on lined pads.</li>
+    <li>Leach solution is applied to extract uranium.</li>
+    <li>The uranium-rich solution is collected and processed.</li>
+  </ul>
+  <img src="heap-leach-recovery.jpg" alt="Heap Leaching Method Image">
+
+  <p><strong>3. Tank Leaching / Conventional Leaching</strong><br>
+  <em>Used by:</em> Langer Heinrich Mine (post-restart)</p>
+  <ul>
+    <li>Ore is ground into fine powder and mixed with water and chemicals.</li>
+    <li>Uranium is dissolved in tanks under controlled conditions.</li>
+    <li>Solution is separated, uranium is recovered and dried as yellowcake (U₃O₈).</li>
+  </ul>
+  <img src="imagestank.jpeg" alt="Tank Leaching Method Image">
+
+  <h3>Mine-Specific Information</h3>
+  <p><strong>Husab Mine:</strong> Open-pit mining using conventional truck and shovel method. Processes include acid leaching with pyrolusite oxidant.</p>
+  <p><strong>Rossing Mine:</strong> Alaskite ore, open-pit mine. Processing involves wet grinding, ferric sulphate oxidation, solvent extraction and drying.</p>
+  <p><strong>Trekkopje Mine:</strong> Low-stripping open cast operation. Heap leaching method using conveyors and crushers, processing 100,000t/day.</p>
+  <p><strong>Langer Heinrich Mine:</strong> Processes calcrete-hosted ores using beneficiation, alkaline leaching, CCD, ion exchange, and calcining.</p>
+
+ 
+<h3>Video Resources on Uranium Mining</h3>
+ 
+<h3>Operations</h3>
+  <p>
+    Watch an overview of uranium mine operations: <br />
+    <a href="https://youtu.be/yiGspNCK2fs?si=_3SUsb3itgyvINgi" target="_blank">
+      ▶️ Uranium Mine Operations – YouTube
+    </a>
+  </p>
+
+  <h3>Mining Methods</h3>
+  <p>
+    Learn about different uranium mining methods: <br />
+    <a href="https://youtu.be/ZbonPe8J4Nw?si=g9mW3L5fFtRY28pA" target="_blank">
+      ▶️ Uranium Mining Methods Explained – YouTube
+    </a>
+  </p>
+</section>
+
+  <section id="challenge">
+  <h2>Situational Tasks & Solutions</h2>
+
+  <h3>Case Study: Water Allocation for Heap-Leach Pilot at Husab Mine</h3>
+
+  <p><strong>Context:</strong></p>
+  <ul>
+    <li>Husab Mine processes ~116 million tonnes of ore per year to produce ~3,300 t U₃O₈.</li>
+    <li>Swakop Uranium is piloting a N$290 million heap-leach project for low-grade ore, with results expected by 2025.</li>
+    <li>Erongo Region is in drought; a second desalination plant (20 Mm³/year) is expected 2025–27.</li>
+    <li>Water constraints limit mine expansion unless infrastructure improves.</li>
+  </ul>
+
+  <p><strong>Real-Life Problem:</strong></p>
+  <p>With only ~30 Mm³/year available water, Husab must decide how to allocate between:</p>
+  <ol>
+    <li>Base sulphuric acid plant (needs ~26 Mm³) for 3,300 t/year output</li>
+    <li>New heap-leach pilot (needs ~4 Mm³) for +300 t/year potential</li>
+  </ol>
+
+  <p><strong>Key Risk:</strong> Allocating to the pilot may reduce base output by 10% (–330 t/year), costing US$46.5M/year, while the pilot only brings in US$42.3M/year at current yields.</p>
+
+  <h4>Quantitative Comparison</h4>
+  <ul>
+    <li><strong>Base Plant:</strong> 26 Mm³ → 3,300 t → US$465M</li>
+    <li><strong>Heap-Leach Pilot:</strong> 4 Mm³ → +300 t → US$42.3M</li>
+    <li><strong>Base Cut (–10%):</strong> –2.6 Mm³ → –330 t → –US$46.5M</li>
+  </ul>
+
+  <p><strong>Scenarios:</strong></p>
+  <ul>
+    <li><em>Maintain both:</em> 26 + 4 = 30 Mm³ → ~3,600 t → US$508M</li>
+    <li><em>Pilot idle:</em> No reallocation → base at 3,300 t → US$465M</li>
+    <li><em>Cut base 10% to run pilot:</em> 2,970 t + 300 t = 3,270 t → US$460M</li>
+  </ul>
+
+  <p><strong>Conclusion:</strong> At current performance, heap-leach does not offset base plant loss. Breakeven occurs at ≥330 t/year from heap-leach.</p>
+
+<img src="Screenshot (53).png" alt="graphs on the production" />
+
+  <h4>Recommended Strategic Decision:</h4>
+  <ol>
+    <li>Defer pilot water use until the desalination plant is online (~2027).</li>
+    <li>Keep base plant running at full capacity.</li>
+    <li>Explore recycled water or effluent reuse for pilot testing.</li>
+    <li>Launch heap-leach after new water supply is secured.</li>
+    <li>Only expand pilot if it exceeds 330 t/year to ensure profitability.</li>
+  </ol>
+
+  <p><strong>Lesson:</strong> This scenario blends geology, engineering, economics, and environment—real-world decisions for Namibia's uranium sector.</p>
+
+</section>
+
+  <section id="data">
+    <h2>Data & Research: Uranium Production</h2>
+    <canvas id="productionChart" width="900" height="400"></canvas>
+    <p><small>Source: Namibian Uranium Association & Ministry of Mines and Energy Namibia</small></p>
+  </section>
+
+  <section id="gallery">
+    <h2>Gallery</h2>
+    <h3>Husab Mine</h3>
+    <div class="gallery-grid">
+      <img src="husab.jpg" alt="Husab Mine Image 1" />
+      <img src="husab 2.jpg" alt="Husab Mine Image 2" />
+    </div>
+
+    <h3>Rossing Mine</h3>
+    <div class="gallery-grid">
+      <img src="uranium.jpg" alt="Rossing Mine Image 1" />
+      <img src="rossing.jpg" alt="Rossing Mine Image 2" />
+    </div>
+
+    <h3>Trekkopje Mine</h3>
+    <div class="gallery-grid">
+      <img src="tre.jpg" alt="Trekkopje Mine Image 1" />
+      <img src="gfhjakkkks2.jpeg" alt="Trekkopje Mine Image 2" />
+    </div>
+
+    <h3>Langer Heinrich Mine</h3>
+    <div class="gallery-grid">
+      <img src="langer 2.jpg" alt="Langer Heinrich Mine Image 1" />
+      <img src="langer.jpg" alt="Langer Heinrich Mine Image 2" />
+    </div>
+  </section>
+
+<section id="team">
+  <h2>Our Team</h2>
+  <ul>
+    <li><strong>Paul</strong> – Team Leader / Coordinator</li>
+    <li><strong>Phillip</strong> – Data Analyst & Research</li>
+    <li><strong>Lyuuvika</strong> – Frontend Developer & UI/UX Design</li>
+    <li><strong>Tsuu Kalola</strong> – Content Writer & Documentation</li>
+  </ul>
+</section>
+
+
+  <section id="contact">
+    <h2>Contact / Feedback</h2>
+    <form>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+    <p>Email: <a href="mailto:naminsights@gmail.com">hackatom2025@gmail.com</a></p>
+  </section>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Section reveal on scroll
+    const revealSections = () => {
+      const trigger = window.innerHeight * 0.85;
+      document.querySelectorAll('section').forEach(sec => {
+        if (sec.getBoundingClientRect().top < trigger) {
+          sec.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', revealSections);
+    window.addEventListener('load', () => {
+      revealSections();
+
+      // Initialize map
+      const map = L.map('map').setView([-22.5, 15], 6);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const mines = [
+        { name: 'Rossing Mine', lat: -22.45, lon: 15.03 },
+        { name: 'Husab Mine', lat: -22.56, lon: 15.03 },
+        { name: 'Langer Heinrich Mine', lat: -22.95, lon: 14.73 },
+        { name: 'Trekkopje Mine', lat: -22.25, lon: 15.23 }
+      ];
+      mines.forEach(mine => {
+        L.marker([mine.lat, mine.lon]).addTo(map).bindPopup(mine.name);
+      });
+
+      // Chart.js Uranium Production Line Chart
+      const ctx = document.getElementById('productionChart').getContext('2d');
+      const productionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+          datasets: [
+            {
+              label: 'Husab Mine (tons)',
+              data: [2800, 2900, 3100, 3200, 3300, 3400],
+              borderColor: '#003366',
+              backgroundColor: 'rgba(0,51,102,0.2)',
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: 'Rossing Mine (tons)',
+              data: [1400, 1300, 1250, 1200, 1100, 1050],
+              borderColor: '#CC3300',
+              backgroundColor: 'rgba(204,51,0,0.2)',
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: 'Langer Heinrich Mine (tons)',
+              data: [500, 600, 0, 800, 900, 950],
+              borderColor: '#339933',
+              backgroundColor: 'rgba(51,153,51,0.2)',
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: 'Trekkopje Mine (tons)',
+              data: [0, 0, 0, 400, 450, 500],
+              borderColor: '#9966CC',
+              backgroundColor: 'rgba(153,102,204,0.2)',
+              fill: true,
+              tension: 0.3,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: {
+              display: true,
+              text: 'Uranium Production by Mine (2018-2023)'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Production (tons)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Year'
+              }
+            }
+          }
+        }
+      });
+
+    });
+  </script>
+
+</body>
+</html>
+
+
+</body>
+</html>
