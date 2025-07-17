@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>URANIUM WEBSITE</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: #333;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: -1;
+    }
+    header {
+      position: relative;
+      background-image: url('cleanclean.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 0;
+    }
+    header * {
+      position: relative;
+      z-index: 1;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+    nav {
+      background: #003366;
+      padding: 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 2rem auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      background-color: #fff;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #home { background-color: #f0f0f0; }
+    #about { background-color: #e0e0e0; }
+    #deposits { background-color: #d0d0d0; }
+    #comparison { background-color: #c0c0c0; }
+    #biotech { background-color: #b0b0b0; }
+    #sustainability { background-color: #a0a0a0; }
+    #quiz { background-color: orange; }
+    #references { background-color: #909090; }
+    #map { background-color: #808080; overflow: hidden; }
+
+    h2 {
+      color: #003366;
+    }
+    ul {
+      margin-left: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: 0.4rem;
+    }
+    a.source-link {
+      color: #003366;
+      text-decoration: underline;
+    }
+
+    /* MAP FIX */
+    #uraniumMap {
+      width: 100%;
+      max-width: 100%;
+      height: 400px;
+      margin-top: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+
+    /* Card styles */
+    #comparison .methods-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    #comparison .method-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      width: 450px;
+      padding: 1rem 1.5rem 2rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #comparison .method-card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #comparison .method-card h3 {
+      margin-bottom: 0.75rem;
+      color: #003366;
+    }
+    #comparison table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    #comparison table, #comparison th, #comparison td {
+      border: 1px solid #999;
+    }
+    #comparison th, #comparison td {
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Uranium Futures Namibia</h1>
+    <p>THE FUTURE OF SUSTAINABLE URANIUM AND CLEAN GREEN ENERGU</p>
+  </header>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#deposits">Deposits</a>
+    <a href="#comparison">Comparison</a>
+    <a href="#biotech">Biotech ISR</a>
+    <a href="#sustainability">Sustainability</a>
+    <a href="#map">Map</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#references">References</a>
+  </nav>
+
+  <section id="home">
+    <h2>Welcome</h2>
+    <p>Nuclear energy is key to low-carbon power. Uranium mining must be safe, efficient, and sustainable. This site compares ISR and traditional mining, including new biotech methods.</p>
+  </section>
+
+
+<section id="about">
+    <h2>About Nuclear Energy</h2>
+
+    <h3>Why Nuclear Energy Matters</h3>
+    <p>Nuclear energy is one of the most powerful tools in the global fight against climate change. It produces electricity without releasing carbon dioxide (CO₂), making it a clean and sustainable alternative to fossil fuels. As more countries commit to reducing emissions, nuclear power stands out as a reliable and scalable solution.</p>
+    <p>Unlike wind or solar, nuclear plants operate 24/7, unaffected by weather. This makes nuclear energy a dependable base-load power source that supports grid stability and ensures energy security.</p>
+
+    <h3>How It Works</h3>
+    <p>Nuclear energy is generated through a process called fission. In this process, uranium atoms are split to release a large amount of heat. This heat is used to produce steam, which turns turbines and generates electricity. Since it doesn't rely on combustion, there are no greenhouse gases released during normal operation — making it one of the cleanest sources of energy available.</p>
+ 
+<img src="necleourenergy.jpg" alt="How Bioleaching Works Illustration" style="max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); margin: 1rem 0;">
+
+    
+
+<h3>Key Advantages</h3>
+    <ul>
+      <li>It produces zero CO₂ emissions during electricity generation.</li>
+      <li>It provides consistent, uninterrupted electricity day and night.</li>
+      <li>It has a high energy density, requiring far less fuel than coal or gas.</li>
+      <li>Modern reactor designs include multiple safety layers, significantly reducing risks.</li>
+    </ul>
+
+    <h3>Rosatom Global Role</h3>
+    <p>Rosatom, the Russian state atomic energy corporation, is a leading global innovator in nuclear technology. It operates more than 30 reactors around the world and continues to develop new solutions for a sustainable future.</p>
+    <p>Rosatom is working on:</p>
+    <ul>
+      <li>Small Modular Reactors (SMRs) for remote and off-grid locations</li>
+      <li>Fast reactors that recycle used nuclear fuel</li>
+      <li>Floating nuclear power plants already in operation</li>
+      <li>Nuclear-powered hydrogen production and water desalination technologies</li>
+    </ul>
+    <p>These advancements are shaping the future of nuclear energy by making it more flexible, efficient, and environmentally friendly.</p>
+
+    <h3>80 Years of Russian Nuclear Expertise</h3>
+    <ul>
+      <li>1943 – Launch of the Soviet atomic research program</li>
+      <li>1954 – Opening of the world’s first nuclear power plant in Obninsk</li>
+      <li>1980s – Expansion of VVER reactor designs worldwide</li>
+      <li>2007 – Establishment of Rosatom as a global energy company</li>
+      <li>2020s – Focus on SMRs, floating power plants, and green hydrogen</li>
+    </ul>
+
+    <h3>Sources:</h3>
+    <ol>
+      <li><a href="https://www.iaea.org/topics/nuclear-power-and-the-clean-energy-transition" target="_blank" rel="noopener" class="source-link">IAEA – The Role of Nuclear Power in the Clean Energy Transition</a></li>
+      <li><a href="https://world-nuclear.org/information-library/current-and-future-generation/nuclear-power-and-the-environment.aspx" target="_blank" rel="noopener" class="source-link">World Nuclear Association – Nuclear Power and the Environment</a></li>
+      <li><a href="https://www.eia.gov/energyexplained/nuclear/" target="_blank" rel="noopener" class="source-link">U.S. Energy Information Administration – Nuclear Explained</a></li>
+      <li><a href="https://www.rosatom.ru/en" target="_blank" rel="noopener" class="source-link">Rosatom Official Website</a></li>
+      <li><a href="https://www.world-nuclear-news.org/Articles/Rosatom-news" target="_blank" rel="noopener" class="source-link">World Nuclear News – Rosatom Articles</a></li>
+      <li><a href="https://www.world-nuclear.org/information-library/current-and-future-generation/safety-of-nuclear-power-reactors.aspx" target="_blank" rel="noopener" class="source-link">World Nuclear Association – Safety of Nuclear Power Reactors</a></li>
+      <li><a href="https://www.iaea.org/resources/safety-standards" target="_blank" rel="noopener" class="source-link">IAEA – Safety Standards</a></li>
+    </ol>
+  </section>
+
+ <section id="deposits">
+    <h2>Uranium Deposits</h2>
+    <p>Uranium is found in many regions around the world, but only certain geological formations allow for it to be mined efficiently and sustainably. These formations are called uranium deposits, and they are classified based on how the uranium got there and the type of rock it's trapped in. Understanding the type of deposit is essential — because it determines whether we use In-Situ Recovery (ISR) or traditional mining methods.</p>
+
+    <div class="deposit">
+      <h3>1. Sandstone-Hosted Deposits</h3>
+      <ul>
+        <li>Found in porous, water-filled sandstone layers deep underground.</li>
+        <li>Uranium is dissolved and easily recovered using In-Situ Recovery (ISR).</li>
+        <li>Found in countries like Kazakhstan, the USA, Uzbekistan, and parts of Namibia.</li>
+      </ul>
+      <p><strong>Ideal for ISR – minimal surface impact, less waste.</strong></p>
+      <img src="sand.jpg" alt="Sandstone Deposit" />
+    </div>
+
+    <div class="deposit">
+      <h3>2. Unconformity-Related Deposits</h3>
+      <ul>
+        <li>Very high-grade uranium trapped deep between older and younger rock layers.</li>
+        <li>Located mainly in Canada’s Athabasca Basin.</li>
+        <li>Due to depth and radioactivity, mining must be done through traditional underground methods.</li>
+      </ul>
+      <p><strong>Not suitable for ISR – too deep and geologically complex.</strong></p>
+      <img src="uncon.jpg" alt="Unconformity Deposit" />
+    </div>
+
+    <div class="deposit">
+      <h3>3. Volcanic Deposits</h3>
+      <ul>
+        <li>Formed from uranium-bearing fluids in ancient volcanic zones.</li>
+        <li>Found in parts of Russia, China, Eastern Europe, and South America.</li>
+        <li>Extraction methods vary based on depth: traditional or, in some cases, ISR if conditions allow.</li>
+      </ul>
+      <p><strong>Sometimes suitable for ISR</strong></p>
+      <img src="volcanic.jpg" alt="Volcanic Deposit" />
+    </div>
+
+    <div class="deposit">
+      <h3>4. Vein-Type Deposits</h3>
+      <ul>
+        <li>Uranium located in hard-rock fractures, often deep underground.</li>
+        <li>Found in countries like Australia, France, and the Czech Republic.</li>
+        <li>Requires traditional underground mining.</li>
+      </ul>
+      <p><strong>Not compatible with ISR</strong></p>
+      <img src="vein.jpg" alt="Vein Deposit" />
+    </div>
+
+    <h3>Global Examples of Deposits and Methods</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Common Deposit Type</th>
+          <th>Mining Method Used</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kazakhstan</td>
+          <td>Sandstone-hosted</td>
+                <td>✅ ISR (largest global user)</td>
+        </tr>
+        <tr>
+          <td>Canada</td>
+          <td>Unconformity-related</td>
+                <td>❌ Underground traditional</td>
+        </tr>
+        <tr>
+          <td>Australia</td>
+          <td>Vein + sandstone mix</td>
+                <td>✅ Both ISR & traditional</td>
+        </tr>
+        <tr>
+          <td>Namibia</td>
+          <td>Alaskite & Calcrete</td>
+                 <td>✅ Open-pit & emerging biotech</td>
+        </tr>
+        <tr>
+          <td>USA</td>
+          <td>Sandstone-hosted</td>
+                 <td>✅ ISR</td>
+        </tr>
+        <tr>
+          <td>Russia</td>
+          <td>Volcanic + sandstone</td>
+                 <td>✅ ISR & traditional</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Why This Matters for Extraction Methods</h3>
+    <ul>
+      <li>ISR is only possible where uranium is in soft, water-bearing rocks like sandstone or calcrete.</li>
+      <li>Traditional mining is necessary for hard-rock or deep underground deposits.</li>
+      <li>Countries with sandstone-rich geology (like Kazakhstan, USA, parts of Namibia) are leading the way in clean, low-impact ISR uranium production.</li>
+      <li>New biotechnological methods, like bioleaching, are being tested in countries like Namibia and Australia to improve recovery from low-grade or waste material.</li>
+    </ul>
+
+    <h3>Sources:</h3>
+    <ol>
+      <li>World Nuclear Association – Types of Uranium Deposits</li>
+      <li>IAEA – Uranium Mining Overview</li>
+    </ol>
+  </section>
+
+  <section id="comparison">
+    <h2>ISR vs Traditional Mining</h2>
+
+    <div class="methods-container">
+      <div class="method-card">
+        <h3>Traditional Open-pit Mining</h3>
+        <img src="open pit 1of1.jpg" alt="Traditional Mining Image" />
+        <table>
+          <tr><th>Feature</th><th>Description</th></tr>
+          <tr><td>Surface Damage</td><td>High</td></tr>
+          <tr><td>Worker Safety</td><td>Low</td></tr>
+          <tr><td>Cost</td><td>High</td></tr>
+          <tr><td>Efficiency</td><td>Varies</td></tr>
+          <tr><td>Water Use</td><td>High</td></tr>
+        </table>
+      </div>
+
+      <div class="method-card">
+        <h3>In-Situ Recovery (ISR)</h3>
+        <img src="insitu.jpeg" alt="ISR Mining Image" />
+        <table>
+          <tr><th>Feature</th><th>Description</th></tr>
+          <tr><td>Surface Damage</td><td>Minimal</td></tr>
+          <tr><td>Worker Safety</td><td>High</td></tr>
+          <tr><td>Cost</td><td>Lower</td></tr>
+          <tr><td>Efficiency</td><td>High for certain deposits</td></tr>
+          <tr><td>Water Use</td><td>Moderate</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+ <section id="biotech">
+    <h2>5. Biotechnological ISR</h2>
+    <h3>Innovation in Uranium Extraction</h3>
+    <p>Biotechnology is transforming uranium mining by making In-Situ Recovery (ISR) even cleaner and more efficient. This modern method, known as <strong>bioleaching</strong>, uses naturally occurring bacteria to dissolve uranium underground, reducing the need for harsh chemicals.</p>
+
+    <h3>What is Bioleaching?</h3>
+    <p>Bioleaching involves injecting special microorganisms into uranium-bearing rock underground. These bacteria naturally break down minerals and release uranium into solution, which can then be pumped to the surface.</p>
+    <p>This technique is especially useful in:</p>
+    <ul>
+      <li>Low-grade uranium deposits</li>
+      <li>Waste rock or mine tailings</li>
+      <li>Difficult-to-reach or fragmented ore bodies</li>
+    </ul>
+    <p><strong>Flow diagram:</strong></p>
+     <img src="bioleaching_diagram.jpg" alt="Bioleaching Flow Diagram" style="max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); margin: 1rem 0;">
+
+    <ul>
+      <li>Step 1: Inject bacteria into well</li>
+      <li>Step 2: Bacteria break down ore</li>
+      <li>Step 3: Uranium solution is pumped out for recovery</li>
+    </ul>
+
+    <h3>Environmental Advantages</h3>
+    <p>Bioleaching allows uranium to be extracted without blasting, crushing, or using large volumes of acid. This makes it:</p>
+    <ul>
+      <li>Less harmful to ecosystems</li>
+      <li>Safer for groundwater when controlled</li>
+      <li>More compatible with ISR closed-loop systems</li>
+    </ul>
+    <p>It also helps reduce mining waste, since the bacteria can be used to recover uranium from leftover tailings that would otherwise go unused.</p>
+
+    <h3>How It Works With ISR</h3>
+    <p>Traditional ISR uses acidic or alkaline solutions to leach uranium from ore. With biotechnology, these solutions can be enhanced by adding bacteria that naturally assist in breaking down uranium minerals.</p>
+    <p>This partnership between biology and mining technology leads to:</p>
+    <ul>
+      <li>Improved uranium recovery rates</li>
+      <li>Lower chemical use</li>
+      <li>Reduced surface footprint</li>
+    </ul>
+
+    <h3>Why It Matters</h3>
+    <p><strong>Biotechnological ISR:</strong></p>
+    <ul>
+      <li>Extends the life of existing uranium deposits</li>
+      <li>Makes low-grade resources economically viable</li>
+      <li>Supports cleaner, smarter, and more sustainable uranium production</li>
+    </ul>
+    <p>This is especially important in countries with strict environmental laws or sensitive ecosystems. It also opens doors for green mining technologies in future energy strategies.</p>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://www.mdpi.com/2075-163X/10/3/233" target="_blank">MDPI – Uranium Bioleaching</a></li>
+      <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0959652620322254" target="_blank">ScienceDirect – Sustainability of Bioleaching</a></li>
+      <li><a href="https://www-pub.iaea.org/MTCD/publications/PDF/Pub1239_web.pdf" target="_blank">IAEA Technical Report</a></li>
+      <li><a href="https://www.nrc.gov/materials/uranium-recovery/extraction-methods/isl-recovery.html" target="_blank">U.S. NRC – ISR Methods</a></li>
+      <li><a href="https://www.sciencedirect.com/topics/earth-and-planetary-sciences/bioleaching" target="_blank">ScienceDirect – Bioleaching Topic</a></li>
+    </ul>
+  </section>
+
+  <section id="sustainability">
+  <h2>Sustainability & Impact</h2>
+
+  <h3>Why It Matters</h3>
+  <p>Modern uranium mining must go beyond extraction. It must protect the environment, support communities, and reduce long-term harm. In-Situ Recovery (ISR), especially when combined with biotechnology, plays a key role in building a more sustainable and responsible uranium industry.</p>
+
+  <h3>Environmental Impact</h3>
+  <p>Traditional mining causes significant land disruption, creates waste rock and radioactive tailings, and consumes large amounts of energy and water. Restoring mined areas takes decades and often fails to return the land to its original state.</p>
+  <p><strong>ISR drastically reduces this impact:</strong></p>
+  <ul>
+    <li>No open pits or deep tunnels</li>
+    <li>Minimal land clearing</li>
+    <li>Closed-loop systems reuse water</li>
+    <li>Lower energy use per kilogram of uranium produced</li>
+  </ul>
+  <p>With biotech, the process eliminates or reduces chemical additives, and allows the recovery of uranium from waste materials, cutting down environmental pollution even further.</p>
+
+  <h3>Economic Sustainability</h3>
+  <p>Traditional mining often requires large upfront investment and long construction times. It also generates costly waste that must be managed for years.</p>
+  <p><strong>ISR offers better economics:</strong></p>
+  <ul>
+    <li>Faster setup and shutdown</li>
+    <li>Cheaper operational costs</li>
+    <li>Ability to mine low-grade deposits profitably</li>
+    <li>Boosts economic potential for smaller or remote uranium-rich countries</li>
+  </ul>
+  <p>Biotechnological ISR unlocks value from leftover ore, helping mining companies recover more while spending less.</p>
+
+  <h3>Social & Community Impact</h3>
+  <p>Mining affects people too—not just land. Traditional mines can displace communities, damage water sources, and create hazardous working conditions.</p>
+  <p><strong>ISR improves social outcomes by:</strong></p>
+  <ul>
+    <li>Creating safer jobs above ground</li>
+    <li>Using less land, allowing co-existence with farming or grazing</li>
+    <li>Requiring fewer workers, but in higher-skilled roles</li>
+    <li>Reducing noise, dust, and long-term health risks</li>
+  </ul>
+  <p>Communities benefit more when mining is cleaner, quieter, and better managed.</p>
+
+  <h3>Summary</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Sustainability Factor</th>
+        <th>Traditional Mining</th>
+        <th>ISR (with or without biotech)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Land Disruption</td>
+        <td>High</td>
+        <td>Very Low</td>
+      </tr>
+      <tr>
+        <td>Waste Produced</td>
+        <td>Tailings, waste rock</td>
+        <td>Minimal, liquid recycled</td>
+      </tr>
+      <tr>
+        <td>Water Use</td>
+        <td>High</td>
+        <td>Moderate, mostly reused</td>
+      </tr>
+      <tr>
+        <td>Chemical Use</td>
+        <td>High</td>
+        <td>Low (especially with bacteria)</td>
+      </tr>
+      <tr>
+        <td>Worker Conditions</td>
+        <td>Underground, hazardous</td>
+        <td>Safer, surface-based operations</td>
+      </tr>
+      <tr>
+        <td>Long-Term Risk</td>
+        <td>Radiation, tailings</td>
+        <td>Contained, easier to decommission</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Final Thought</h3>
+  <p>Sustainable uranium extraction is not optional—it's essential. In-Situ Recovery, enhanced by biotechnology, offers a way forward that protects the environment, supports communities, and ensures long-term access to clean nuclear energy. It’s not just better science—it’s a better future.</p>
+
+  <h3>Sources</h3>
+  <ul>
+    <li><a href="https://world-nuclear.org/information-library/current-and-future-generation/in-situ-leach-mining-of-uranium.aspx" target="_blank">World Nuclear Association</a></li>
+    <li><a href="https://www-pub.iaea.org/MTCD/publications/PDF/Pub1239_web.pdf" target="_blank">IAEA Report</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0959652620322254" target="_blank">ScienceDirect Study</a></li>
+    <li><a href="https://www.uranium1.com/our-operations/isr-mining/" target="_blank">Uranium One</a></li>
+    <li><a href="https://www.nrc.gov/materials/uranium-recovery/extraction-methods/isl-recovery.html" target="_blank">U.S. NRC</a></li>
+    <li><a href="https://www.mdpi.com/2075-163X/10/3/233" target="_blank">MDPI Research</a></li>
+  </ul>
+</section>
+
+  <section id="map">
+    <h2>Uranium Mining Map – Namibia</h2>
+    <div id="uraniumMap"></div>
+   </section>
+
+  <section id="quiz">
+    <h2>Test Your Knowledge</h2>
+    
+    <form id="quizForm">
+      <fieldset>
+        <legend>1. Which method causes the least surface disruption?</legend>
+        <label><input type="radio" name="q1" value="ISR"> ISR</label><br />
+        <label><input type="radio" name="q1" value="Traditional"> Traditional Mining</label>
+      </fieldset>
+      <fieldset>
+        <legend>2. What is one key benefit of biotech in ISR?</legend>
+        <label><input type="radio" name="q2" value="Less Chemicals"> Reduces environmental impact</label><br />
+        <label><input type="radio" name="q2" value="More Chemicals"> Uses more chemicals</label>
+      </fieldset>
+      <fieldset>
+        <legend>3. Which organization is a global leader in nuclear technology?</legend>
+        <label><input type="radio" name="q3" value="Rosatom"> Rosatom</label><br />
+        <label><input type="radio" name="q3" value="IAEA"> IAEA</label>
+      </fieldset>
+      <fieldset>
+        <legend>4. What process is used to generate nuclear energy?</legend>
+        <label><input type="radio" name="q4" value="Fission"> Fission</label><br />
+        <label><input type="radio" name="q4" value="Fusion"> Fusion</label>
+      </fieldset>
+      <fieldset>
+        <legend>5. Which of these is NOT a type of uranium deposit?</legend>
+        <label><input type="radio" name="q5" value="Sandstone"> Sandstone-hosted</label><br />
+        <label><input type="radio" name="q5" value="Volcanic"> Volcanic</label><br />
+        <label><input type="radio" name="q5" value="Coal"> Coal</label>
+      </fieldset>
+      <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top:1rem; font-weight:bold;"></div>
+  </section>
+
+  <section id="references">
+    <h2>References & Sources</h2>
+    <ul>
+      <li>IAEA Safety Standards</li>
+      <li>Rosatom Technical Documents</li>
+      <li>Peer-reviewed journals on ISR and bioleaching</li>
+    </ul>
+  </section>
+
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      const map = L.map('uraniumMap').setView([-22.45, 15.05], 7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const mines = [
+        {
+          name: "Rossing Uranium Mine",
+          coords: [-22.4333, 15.0333],
+          info: "One of the world’s oldest uranium mines, open-pit operation."
+        },
+        {
+          name: "Husab Uranium Mine",
+          coords: [-22.5275, 15.0494],
+          info: "One of the largest uranium mines in Namibia, near Rossing."
+        },
+        {
+          name: "Langer Heinrich Mine",
+          coords: [-22.4625, 15.3972],
+          info: "Operated by Paladin Energy, currently under care & maintenance."
+        }
+      ];
+
+      mines.forEach(mine => {
+        L.marker(mine.coords)
+          .addTo(map)
+          .bindPopup(<strong>${mine.name}</strong><br>${mine.info});
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const trigger = window.innerHeight * 0.85;
+      document.querySelectorAll('section').forEach(sec => {
+        if (sec.getBoundingClientRect().top < trigger) {
+          sec.classList.add('visible');
+        }
+      });
+    });
+  </script>
+<script>
+  window.addEventListener('scroll', () => {
+    const trigger = window.innerHeight * 0.85;
+    document.querySelectorAll('section').forEach(sec => {
+      if (sec.getBoundingClientRect().top < trigger) {
+        sec.classList.add('visible');
+      }
+    });
+  });
+
+  window.addEventListener('load', () => {
+    document.querySelectorAll('section').forEach(sec => {
+      sec.classList.add('visible'); // fallback in case scroll doesn't trigger
+    });
+  });
+</script>
+</body>
+</html>
